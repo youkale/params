@@ -7,7 +7,7 @@ go-querystruct is Go library for convert URL query parameters to struct .
 ## Usage ##
 
 ```
-import "github.com/mokeoo/go-querystruct/params"
+import "github.com/youkale/go-querystruct/params"
 
 type User struct {
 	UserId  int64   `param:"user_id,100"`
