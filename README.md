@@ -45,7 +45,7 @@ o := Order{}
 ```
 goos: linux
 goarch: amd64
-pkg: github.com/mokeoo/go-querystruct/params
+pkg: github.com/youkale/go-querystruct/params
 2000000000	         0.00 ns/op
 PASS
 ```
