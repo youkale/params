@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	IllegalStruct = errors.New("query: Unmarshal() expects struct input. ")
+	ErrStruct = errors.New("Unmarshal() expects struct input. ")
 )
 
 //Unmarshal url.Values to struct
@@ -18,12 +18,12 @@ func Unmarshal(values url.Values, s interface{}) error {
 	val := reflect.ValueOf(s)
 	for val.Kind() == reflect.Ptr {
 		if val.IsNil() {
-			return IllegalStruct
+			return ErrStruct
 		}
 		val = val.Elem()
 	}
 	if val.Kind() != reflect.Struct {
-		return IllegalStruct
+		return ErrStruct
 	}
 	return reflectValueFromTag(values, val)
 }
@@ -44,27 +44,29 @@ func reflectValueFromTag(values url.Values, val reflect.Value) error {
 		case reflect.Bool:
 			b, err := strconv.ParseBool(uv)
 			if err != nil {
-				return errors.New(fmt.Sprintf("convert has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
+				return errors.New(fmt.Sprintf("cast bool has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
 			}
 			sv.SetBool(b)
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 			n, err := strconv.ParseUint(uv, 10, 64)
 			if err != nil || sv.OverflowUint(n) {
-				return errors.New(fmt.Sprintf("convert has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
+				return errors.New(fmt.Sprintf("cast uint has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
 			}
 			sv.SetUint(n)
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 			n, err := strconv.ParseInt(uv, 10, 64)
 			if err != nil || sv.OverflowInt(n) {
-				return errors.New(fmt.Sprintf("convert has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
+				return errors.New(fmt.Sprintf("cast int has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
 			}
 			sv.SetInt(n)
 		case reflect.Float32, reflect.Float64:
 			n, err := strconv.ParseFloat(uv, sv.Type().Bits())
 			if err != nil || sv.OverflowFloat(n) {
-				return errors.New(fmt.Sprintf("convert has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
+				return errors.New(fmt.Sprintf("cast float has error, expect type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
 			}
 			sv.SetFloat(n)
+		default:
+			return errors.New(fmt.Sprintf("unsupported type: %v ,val: %v ,query key: %v", sv.Type(), uv, tag))
 		}
 	}
 	return nil

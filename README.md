@@ -1,10 +1,11 @@
-# go-querystruct #
-
-go-querystruct is Go library for convert URL query parameters to struct .
+### go-querystruct
 
 
+go-querystruct is Go library for cast url.Values to struct .
 
-## Usage ##
+----
+
+### Usage ###
 
 ```
 import "github.com/youkale/go-querystruct/params"
@@ -19,35 +20,36 @@ type User struct {
 }
 
 o := Order{}
-		userId := rand.Int63()
-		storeId := rand.Int()
-		page := rand.Float32()
-		age := rand.Intn(8)
-		want := url.Values{
-			"store_id": {fmt.Sprintf("%v", storeId)},
-			"user_id":  {strconv.FormatInt(userId, 64)},
-			"page":     {fmt.Sprintf("%v", page)},
-			"name":     {"sdfdsfs"},
-			"age":      {fmt.Sprintf("%v", age)},
-		}
-		e := params.Unmarshal(want, &o)
-		if e == nil {
-			if o.StoreId != storeId || o.UserId != userId || o.Page != page {
-				b.Error("has error ")
-			}
-		} else {
-			b.Error(e)
-		}
+userId := rand.Int63()
+storeId := rand.Int()
+page := rand.Float32()
+age := rand.Intn(8)
+want := url.Values{
+    "store_id": {fmt.Sprintf("%v", storeId)},
+    "user_id":  {strconv.FormatInt(userId, 64)},
+    "page":     {fmt.Sprintf("%v", page)},
+    "name":     {"sdfdsfs"},
+    "age":      {fmt.Sprintf("%v", age)},
+}
+e := params.Unmarshal(want, &o)
+if e == nil {
+    if o.StoreId != storeId || o.UserId != userId || o.Page != page {
+        b.Error("has error ")
+    }
+} else {
+    b.Error(e)
+}
 
 ```
 
-## Performance ##
+### Performance ###
+
 ```
-goos: linux
-goarch: amd64
-pkg: github.com/youkale/go-querystruct/params
-2000000000	         0.00 ns/op
-PASS
+    goos: linux
+    goarch: amd64
+    pkg: github.com/youkale/go-querystruct/params
+    2000000000	         0.00 ns/op
+    PASS
 ```
 
 ## License ##
