@@ -3,7 +3,7 @@ Params
 [![Badge](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg?style=flat-square)](https://996.icu/#/en_US)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=flat-square)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
-params is Go library for convert url.Values to struct, support Http request query-parameters, form-parameters.
+Params is Go library for convert url.Values to struct, support Http request query-parameters, form-parameters.
 
 ----
 
@@ -32,9 +32,12 @@ type User struct {
 2. In your HTTP handler, parse the query parameters into an instance of the struct:
 
 ```go
+import "github.com/youkale/params"
+
 func MyHandler(w http.ResponseWriter, r *http.Request) {
+    // or convert request.Form
     var user User
-    if err := querystruct.Unmarshal(r.URL.Query(), &user); err != nil {
+    if err := params.Convert(r.URL.Query(), &user); err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
     return
     }
