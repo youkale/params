@@ -1,17 +1,23 @@
-### go-querystruct
-
+Params
+--- 
 [![Badge](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg?style=flat-square)](https://996.icu/#/en_US)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=flat-square)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
-go-querystruct is Go library for cast url.Values to struct .
+params is Go library for convert url.Values to struct, support Http request query-parameters, form-parameters.
 
 ----
 
-### Usage ###
+### Installation
+Use `go get` to install:
 
-```golang
-import "github.com/youkale/go-querystruct"
+```go
+ go get github.com/youkale/params
+```
 
+Usage
+1. Define a struct with tags that match the query parameter names:
+
+```go
 type User struct {
     UserId  int64   `param:"user_id,100"`
     StoreId int     `param:"store_id"`
@@ -21,35 +27,37 @@ type User struct {
     Enable  bool    `param:"enable,false"`
 }
 
-o := Order{}
-userId := rand.Int63()
-storeId := rand.Int()
-page := rand.Float32()
-age := rand.Intn(8)
-want := url.Values{
-    "store_id": {fmt.Sprintf("%v", storeId)},
-    "user_id":  {strconv.FormatInt(userId, 64)},
-    "page":     {fmt.Sprintf("%v", page)},
-    "name":     {"sdfdsfs"},
-    "age":      {fmt.Sprintf("%v", age)},
-}
-e := params.Unmarshal(want, &o)
-if e == nil {
-    if o.StoreId != storeId || o.UserId != userId || o.Page != page {
-        b.Error("has error ")
-    }
-} else {
-    b.Error(e)
-}
-
 ```
+
+2. In your HTTP handler, parse the query parameters into an instance of the struct:
+
+```go
+func MyHandler(w http.ResponseWriter, r *http.Request) {
+    var user User
+    if err := querystruct.Unmarshal(r.URL.Query(), &user); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+    return
+    }
+        // Do something with the user struct...
+}
+```
+
+Params will automatically parse the query parameters and set the values in the struct fields.
+
+
+### Tag Options
+
+- `param:"store_id,store_01"`: The following options can be included in the `param` tag.
+- `store_id`: Indicates the key to get the content of the field.
+- `store_01`: specifies a default value for the field if the query parameter is not present.
+
 
 ### Performance ###
 
 ```
     goos: linux
     goarch: amd64
-    pkg: github.com/youkale/go-querystruct/params
+    pkg: github.com/youkale/params
     2000000000	         0.00 ns/op
     PASS
 ```
