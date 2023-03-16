@@ -10,15 +10,15 @@ go-querystruct is Go library for cast url.Values to struct .
 ### Usage ###
 
 ```golang
-import "github.com/youkale/go-querystruct/params"
+import "github.com/youkale/go-querystruct"
 
 type User struct {
-	UserId  int64   `param:"user_id,100"`
-	StoreId int     `param:"store_id"`
-	Page    float32 `param:"store_id"`
-	Name    string  `param:"name"`
-	Age     uint8   `param:"age,18"`
-	Enable  bool    `param:"enable,false"`
+    UserId  int64   `param:"user_id,100"`
+    StoreId int     `param:"store_id"`
+    Page    float32 `param:"page"`
+    Name    string  `param:"name"`
+    Age     uint8   `param:"age,18"`
+    Enable  bool    `param:"enable,false"`
 }
 
 o := Order{}

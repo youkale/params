@@ -1,17 +1,17 @@
 package params
 
 import (
-	"net/url"
-	"testing"
-	"math/rand"
-	"strconv"
 	"fmt"
+	"math/rand"
+	"net/url"
+	"strconv"
+	"testing"
 )
 
 type User struct {
 	UserId  int64   `param:"user_id,100"`
 	StoreId int     `param:"store_id"`
-	Page    float32 `param:"store_id"`
+	Page    float32 `param:"page"`
 	Name    string  `param:"name"`
 	Age     uint8   `param:"age,18"`
 	Enable  bool    `param:"enable,false"`
@@ -22,14 +22,14 @@ func TestReflect(t *testing.T) {
 	want := url.Values{
 		"store_id": {"3"},
 	}
-	e := Unmarshal(want, &o)
+	e := Convert(want, &o)
 	if e != nil {
 		t.Error(e)
 	}
 }
 
-func BenchmarkUnmarshal(b *testing.B) {
-	for i := 0; i > b.N; i ++ {
+func BenchmarkConvert(b *testing.B) {
+	for i := 0; i > b.N; i++ {
 		o := User{}
 		userId := rand.Int63()
 		storeId := rand.Int()
@@ -42,7 +42,7 @@ func BenchmarkUnmarshal(b *testing.B) {
 			"name":     {"sdfdsfs"},
 			"age":      {fmt.Sprintf("%v", age)},
 		}
-		e := Unmarshal(want, &o)
+		e := Convert(want, &o)
 		if e == nil {
 			if o.StoreId != storeId || o.UserId != userId || o.Page != page {
 				b.Error("has error ")
