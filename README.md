@@ -9,7 +9,7 @@ go-querystruct is Go library for cast url.Values to struct .
 
 ### Usage ###
 
-```
+```golang
 import "github.com/youkale/go-querystruct/params"
 
 type User struct {
